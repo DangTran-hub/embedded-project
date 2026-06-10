@@ -1,6 +1,7 @@
 #include "smart_lock.h"
 
 #include "battery_monitor.h"
+#include "mqtt_topics.h"
 
 #include <ArduinoJson.h>
 #include <Keypad.h>
@@ -119,7 +120,7 @@ static void publishStatus(bool locked, const char *method, const char *userName,
         return;
     }
 
-    String topic = "smartlock/" + String(LOCK_ID) + "/status";
+    String topic = mqttStatusTopic(LOCK_ID);
     StaticJsonDocument<256> doc;
     doc["locked"] = locked;
     doc["online"] = true;
@@ -139,7 +140,7 @@ static void publishAdminEvent(const char *method, const char *note)
         return;
     }
 
-    String topic = "smartlock/" + String(LOCK_ID) + "/status";
+    String topic = mqttStatusTopic(LOCK_ID);
     StaticJsonDocument<256> doc;
     doc["online"] = true;
     doc["method"] = method;
@@ -187,7 +188,8 @@ static void maintainConnections(void)
     if (!mqttClient.connected()) {
         String clientId = "ESP32_Lock_" + String(random(1000, 9999));
         if (mqttClient.connect(clientId.c_str(), "anhminh", "020623")) {
-            mqttClient.subscribe(("smartlock/" + String(LOCK_ID) + "/cmd").c_str());
+            String commandTopic = mqttCommandTopic(LOCK_ID);
+            mqttClient.subscribe(commandTopic.c_str());
             publishStatus((digitalRead(SOLENOID_PIN) == LOW), "boot", "He Thong", false);
         }
     }
@@ -219,7 +221,8 @@ static void handleRFID(void)
 
             String payload;
             serializeJson(doc, payload);
-            mqttClient.publish(("smartlock/" + String(LOCK_ID) + "/status").c_str(), payload.c_str());
+            String statusTopic = mqttStatusTopic(LOCK_ID);
+            mqttClient.publish(statusTopic.c_str(), payload.c_str());
         }
 
         lcd.clear();

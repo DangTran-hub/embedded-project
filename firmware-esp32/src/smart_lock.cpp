@@ -1,5 +1,7 @@
 #include "smart_lock.h"
 
+#include "battery_monitor.h"
+
 #include <ArduinoJson.h>
 #include <Keypad.h>
 #include <LiquidCrystal_I2C.h>
@@ -47,7 +49,6 @@ static void beepStep(void);
 static void beepSuccess(void);
 static void beepError(void);
 static void wakeUpLCD(void);
-static int getBatteryPercent(void);
 static void showIdle(void);
 static void publishStatus(bool locked, const char *method, const char *userName, bool saveToHistory);
 static void publishAdminEvent(const char *method, const char *note);
@@ -96,21 +97,9 @@ static void wakeUpLCD(void)
     }
 }
 
-static int getBatteryPercent(void)
-{
-    long sum = 0;
-    for (int i = 0; i < 10; i++) {
-        sum += analogRead(BATTERY_PIN);
-    }
-
-    float voltage = ((sum / 10.0f) / 4095.0f) * 3.3f * 4.7f;
-    float percent = (voltage - 9.0f) / (12.6f - 9.0f) * 100.0f;
-    return (int)constrain(percent, 0, 100);
-}
-
 static void showIdle(void)
 {
-    globalBattery = getBatteryPercent();
+    globalBattery = batteryMonitorReadPercent();
     wakeUpLCD();
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -134,7 +123,7 @@ static void publishStatus(bool locked, const char *method, const char *userName,
     StaticJsonDocument<256> doc;
     doc["locked"] = locked;
     doc["online"] = true;
-    doc["battery"] = getBatteryPercent();
+    doc["battery"] = batteryMonitorReadPercent();
     doc["method"] = method;
     doc["by"] = userName;
     doc["save"] = saveToHistory;
@@ -463,6 +452,7 @@ void smartLockSetup(void)
     pinMode(SOLENOID_PIN, OUTPUT);
     pinMode(BUZZER_PIN, OUTPUT);
     pinMode(BUTTON_PIN, INPUT_PULLUP);
+    batteryMonitorBegin(BATTERY_PIN, 4.7f);
 
     Wire.begin(21, 22);
     lcd.init();

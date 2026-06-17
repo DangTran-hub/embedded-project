@@ -1,3 +1,15 @@
+/**
+ * @file battery_monitor.cpp
+ * @brief Battery measurement service for the ESP32 smart lock firmware.
+ *
+ * @details
+ * This module reads the battery voltage through an ESP32 ADC input connected to
+ * a resistor voltage divider. Each measurement is averaged over multiple ADC
+ * samples to reduce noise, converted back to pack voltage using the configured
+ * divider ratio, and mapped to an estimated percentage for a 3-cell lithium
+ * battery range from 9.0 V to 12.6 V. The smart lock uses this percentage for
+ * local LCD display and MQTT status reporting.
+ */
 #include "battery_monitor.h"
 
 static uint8_t batteryPin = 35;

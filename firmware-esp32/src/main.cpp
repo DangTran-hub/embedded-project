@@ -1,15 +1,21 @@
-/**
- * @file main.cpp
- * @brief Arduino entry point for the ESP32 smart lock application.
- *
- * @details
- * This file keeps the Arduino runtime interface intentionally small. During
- * startup, setup() delegates all hardware, network, storage, and user-interface
- * initialization to smartLockSetup(). During normal operation, loop() repeatedly
- * calls smartLockLoop(), which runs the lock state machine, keypad and RFID
- * scanning, MQTT communication, button handling, battery reporting, and LCD
- * timeout management.
- */
+/**************************************************
+* Main Module - Project ESP32 Smart Lock
+*
+* Copyright 2026 Embedded Project Team
+* All Rights Reserved
+*
+* The information contained herein is confidential
+* property of Embedded Project Team. The use, copying,
+* transfer or disclosure of such information is prohibited
+* except by express written agreement with Embedded
+* Project Team.
+*
+* 06/24/26 - Version 1.0 - ROM ID N/A
+*       Initial release
+**************************************************/
+#undef VERSION
+#define VERSION "Version 1.00"
+
 #include "smart_lock.h"
 
 void setup(void)

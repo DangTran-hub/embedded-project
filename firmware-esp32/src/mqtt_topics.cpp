@@ -1,14 +1,21 @@
-/**
- * @file mqtt_topics.cpp
- * @brief MQTT topic builder for the ESP32 smart lock firmware.
- *
- * @details
- * This module centralizes the MQTT topic naming scheme used by the device and
- * application server. All topics are generated from the lock identifier under
- * the "smartlock/<lock-id>" namespace. Status messages are published to the
- * "/status" topic, while remote control and administration commands are
- * received from the "/cmd" topic.
- */
+/**************************************************
+* MQTT Topics Module - Project ESP32 Smart Lock
+*
+* Copyright 2026 Embedded Project Team
+* All Rights Reserved
+*
+* The information contained herein is confidential
+* property of Embedded Project Team. The use, copying,
+* transfer or disclosure of such information is prohibited
+* except by express written agreement with Embedded
+* Project Team.
+*
+* 06/24/26 - Version 1.0 - ROM ID N/A
+*       Initial release
+**************************************************/
+#undef VERSION
+#define VERSION "Version 1.00"
+
 #include "mqtt_topics.h"
 
 static String mqttBaseTopic(const char *lockId)

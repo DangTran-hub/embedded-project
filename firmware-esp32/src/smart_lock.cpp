@@ -1,21 +1,21 @@
-/**
- * @file smart_lock.cpp
- * @brief Core control logic for the ESP32 IoT smart lock.
- *
- * @details
- * This module coordinates all runtime behavior of the lock: keypad password
- * entry, RFID card authentication, local unlock button handling, LCD feedback,
- * buzzer alerts, solenoid control, battery monitoring, Wi-Fi connection, MQTT
- * messaging, and non-volatile storage through Preferences. It uses a simple
- * state machine to manage idle, password entry, password change, temporary
- * lockout, and RFID learning flows.
- *
- * Valid local or remote credentials trigger the solenoid, publish the unlock
- * event, and then automatically return the door to the locked state. Failed
- * password or RFID attempts are counted and can temporarily lock input for a
- * fixed timeout. MQTT commands allow the application server to unlock the door
- * remotely, start RFID enrollment, and add or remove authorized card IDs.
- */
+/**************************************************
+* Smart Lock Module - Project ESP32 Smart Lock
+*
+* Copyright 2026 Embedded Project Team
+* All Rights Reserved
+*
+* The information contained herein is confidential
+* property of Embedded Project Team. The use, copying,
+* transfer or disclosure of such information is prohibited
+* except by express written agreement with Embedded
+* Project Team.
+*
+* 06/24/26 - Version 1.0 - ROM ID N/A
+*       Initial release
+**************************************************/
+#undef VERSION
+#define VERSION "Version 1.00"
+
 #include "smart_lock.h"
 
 #include "battery_monitor.h"

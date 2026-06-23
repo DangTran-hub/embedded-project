@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smart_lock/models/lock.dart';
-import 'package:smart_lock/providers/lock_provider.dart';
-import 'package:smart_lock/screens/history_screen.dart';
-import 'package:smart_lock/screens/lock_settings_screen.dart';
-import 'package:smart_lock/widgets/status_tile.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../models/lock.dart';
+import '../providers/lock_provider.dart';
+import '../widgets/status_tile.dart';
+import 'history_screen.dart';
+import 'lock_settings_screen.dart';
 
 class LockDetailScreen extends ConsumerWidget {
   final LockModel lock;
@@ -62,7 +63,8 @@ class LockDetailScreen extends ConsumerWidget {
                   height: 200,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: (updatedLock.isLocked ? Colors.red : Colors.green).withOpacity(0.1),
+                    color: (updatedLock.isLocked ? Colors.red : Colors.green)
+                        .withValues(alpha: 0.1),
                   ),
                 ),
                 Icon(

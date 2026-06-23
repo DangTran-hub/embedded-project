@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/legacy.dart'; // Giữ nguyên Legacy theo ý bạn
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,7 +55,9 @@ class LockNotifier extends StateNotifier<List<LockModel>> {
     if (_role == 'admin') {
       _lockSub = _db.snapshots().listen(_onSnapshot);
     } else {
-      final email = user.email!.toLowerCase().trim();
+      final email = user.email?.toLowerCase().trim();
+      if (email == null || email.isEmpty) return;
+
       _lockSub = _db
           .where("sharedWith", arrayContains: email)
           .snapshots()
@@ -112,7 +115,7 @@ class LockNotifier extends StateNotifier<List<LockModel>> {
   
   // 1. CHỐT CHẶN 1: Nếu ESP32 gửi save: false (như lệnh khóa tự động) -> THOÁT NGAY
   if (data["save"] != true) {
-    print("ℹ️ MQTT: Chỉ cập nhật giao diện, không ghi lịch sử.");
+    debugPrint('MQTT: Chi cap nhat giao dien, khong ghi lich su.');
     return;
   }
 
@@ -141,9 +144,9 @@ class LockNotifier extends StateNotifier<List<LockModel>> {
       method: method,
       by: data["by"] ?? "Hệ thống",
     );
-    print("✅ Đã ghi lịch sử: $actionLabel bởi $method");
+    debugPrint('Da ghi lich su: $actionLabel boi $method');
   } catch (e) {
-    print("❌ Lỗi Firestore: $e");
+    debugPrint('Loi Firestore: $e');
   }
 }
 
@@ -184,7 +187,7 @@ class LockNotifier extends StateNotifier<List<LockModel>> {
       });
       mqttService.publish(topic, payload);
     } catch (e) {
-      print("❌ Lỗi xóa thẻ: $e");
+      debugPrint('Loi xoa the: $e');
     }
   }
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smart_lock/models/lock.dart';
-import 'package:smart_lock/providers/lock_provider.dart';
-import 'package:smart_lock/screens/lock_detail_screen.dart';
+
+import '../models/lock.dart';
+import '../providers/lock_provider.dart';
+import '../screens/lock_detail_screen.dart';
 
 class LockCard extends ConsumerWidget {
   final LockModel lock;
@@ -95,7 +96,9 @@ class LockCard extends ConsumerWidget {
             value: !lock.isLocked,
             onChanged: lock.isOnline
                 ? (value) async {
-                    print("👉 UI toggle pressed | lockId=${lock.id} | value=$value");
+                    debugPrint(
+                      'UI toggle pressed | lockId=${lock.id} | value=$value',
+                    );
                     await ref
                         .read(lockProvider.notifier)
                         .toggleLock(lock.id);

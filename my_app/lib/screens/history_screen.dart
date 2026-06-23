@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_lock/providers/lock_provider.dart';
+
+import '../providers/lock_provider.dart';
 
 class HistoryScreen extends ConsumerWidget {
   final String lockId;
@@ -197,7 +198,7 @@ class HistoryScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03), 
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10, 
                       offset: const Offset(0, 4)
                     )

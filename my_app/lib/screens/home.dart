@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:smart_lock/providers/lock_provider.dart';
-import 'package:smart_lock/widgets/lock_card.dart';
-import 'package:smart_lock/screens/add_lock_screen.dart';
+import '../providers/lock_provider.dart';
+import '../widgets/lock_card.dart';
+import 'add_lock_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
